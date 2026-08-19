@@ -107,7 +107,7 @@ try {
 Write-Host "Abrindo páginas de download dos softwares..." -ForegroundColor Cyan
 
 $linksDownload = [ordered]@{
-    "LibreOffice"      = "https://www.libreoffice.org/download/download/"
+    "LibreOffice"      = "https://www.libreoffice.org/download/"
     "Adobe Reader"     = "https://get.adobe.com/reader/"
     "7-Zip"            = "https://www.7-zip.org/download.html"
     "Microsoft Teams"  = "https://www.microsoft.com/microsoft-teams/download-app"
