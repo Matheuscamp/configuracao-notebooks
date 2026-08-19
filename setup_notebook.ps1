@@ -1,30 +1,3 @@
-<#
-    Script de Configuração Inicial de Notebooks
-    ---------------------------------------------
-    O que este script faz:
-    1) Altera a senha do usuário local "indi"
-    2) Adiciona "indi" ao grupo Administradores locais
-    3) Altera a senha da conta local Administrador
-    4) Marca "senha nunca expira" e habilita a conta Administrador
-    5) Renomeia o computador (hostname)
-    6) Abre as páginas de download dos softwares padrão da empresa
-       (LibreOffice, Adobe Reader, 7-Zip, Teams, Chrome, Firefox,
-       Edge [só se não instalado], AnyDesk, FortiClient)
-
-    COMO USAR:
-    1. Edite as variáveis na seção "CONFIGURAÇÃO" abaixo antes de rodar.
-    2. Clique com botão direito no arquivo > "Executar com PowerShell como Administrador"
-       (ou abra um PowerShell como Administrador e rode: .\setup_notebook.ps1)
-    3. Se aparecer erro de política de execução, rode antes (como admin):
-       Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force
-    4. O computador será reiniciado ao final para aplicar o novo nome. Ajuste
-       $reiniciarAoFinal para $false se quiser reiniciar manualmente depois.
-
-    IMPORTANTE SOBRE SEGURANÇA:
-    - Não deixe este arquivo com senhas salvas em locais compartilhados/repositórios.
-    - Depois de usar, apague o arquivo ou limpe as senhas do texto.
-#>
-
 # ===================== CONFIGURAÇÃO (edite aqui) =====================
 $senhaIndi           = "DEFINA_UMA_SENHA_FORTE_AQUI"
 $senhaAdministrador  = "DEFINA_OUTRA_SENHA_FORTE_AQUI"
