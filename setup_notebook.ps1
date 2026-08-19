@@ -7,6 +7,9 @@
     3) Altera a senha da conta local Administrador
     4) Marca "senha nunca expira" e habilita a conta Administrador
     5) Renomeia o computador (hostname)
+    6) Abre as páginas de download dos softwares padrão da empresa
+       (LibreOffice, Adobe Reader, 7-Zip, Teams, Chrome, Firefox,
+       Edge [só se não instalado], AnyDesk, FortiClient)
 
     COMO USAR:
     1. Edite as variáveis na seção "CONFIGURAÇÃO" abaixo antes de rodar.
@@ -23,10 +26,10 @@
 #>
 
 # ===================== CONFIGURAÇÃO (edite aqui) =====================
-$senhaIndi        = "DEFINA_UMA_SENHA_FORTE_AQUI"
-$senhaAdministrador = "DEFINA_OUTRA_SENHA_FORTE_AQUI"
-$novoHostname     = "NOTEBOOK0XXX"
-$reiniciarAoFinal = $true
+$senhaIndi           = "DEFINA_UMA_SENHA_FORTE_AQUI"
+$senhaAdministrador  = "DEFINA_OUTRA_SENHA_FORTE_AQUI"
+$novoHostname        = "NOTEBOOK0XXX"
+$reiniciarAoFinal    = $true
 # =======================================================================
 
 # --- Checa se está rodando como Administrador ---
@@ -40,10 +43,7 @@ if (-not $isAdmin) {
 Write-Host "===== Iniciando configuração do notebook =====" -ForegroundColor Cyan
 
 # --- Descobre os nomes locais reais (funciona em PT-BR e EN-US) ---
-# Grupo Administradores tem SID fixo S-1-5-32-544 em qualquer idioma
 $grupoAdmins = (Get-LocalGroup -SID "S-1-5-32-544").Name
-
-# Conta Administrador embutida tem RID 500 (últimos dígitos do SID terminam em -500)
 $contaAdministrador = (Get-LocalUser | Where-Object { $_.SID -like "*-500" }).Name
 
 Write-Host "Grupo de administradores identificado: $grupoAdmins"
@@ -101,6 +101,48 @@ try {
     }
 } catch {
     Write-Host "[ERRO] Não foi possível renomear o computador: $($_.Exception.Message)" -ForegroundColor Red
+}
+
+# --- 6) Abrir páginas de download dos softwares padrão da empresa ---
+Write-Host "Abrindo páginas de download dos softwares..." -ForegroundColor Cyan
+
+$linksDownload = [ordered]@{
+    "LibreOffice"      = "https://www.libreoffice.org/download/download/"
+    "Adobe Reader"     = "https://get.adobe.com/reader/"
+    "7-Zip"            = "https://www.7-zip.org/download.html"
+    "Microsoft Teams"  = "https://www.microsoft.com/microsoft-teams/download-app"
+    "Google Chrome"    = "https://www.google.com/chrome/"
+    "Mozilla Firefox"  = "https://www.mozilla.org/firefox/new/"
+    "AnyDesk"          = "https://anydesk.com/en/downloads"
+    "FortiClient"      = "https://www.fortinet.com/support/product-downloads"
+}
+
+foreach ($item in $linksDownload.GetEnumerator()) {
+    try {
+        Start-Process $item.Value
+        Write-Host "[OK] Página aberta: $($item.Key)" -ForegroundColor Green
+        Start-Sleep -Milliseconds 500
+    } catch {
+        Write-Host "[ERRO] Não foi possível abrir a página de $($item.Key): $($_.Exception.Message)" -ForegroundColor Red
+    }
+}
+
+# Microsoft Edge: só abre a página de download se ele NÃO estiver instalado
+$caminhosEdge = @(
+    "$env:ProgramFiles\Microsoft\Edge\Application\msedge.exe",
+    "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe"
+)
+$edgeInstalado = $caminhosEdge | Where-Object { Test-Path $_ } | Select-Object -First 1
+
+if ($edgeInstalado) {
+    Write-Host "[INFO] Microsoft Edge já está instalado, página de download não será aberta." -ForegroundColor Yellow
+} else {
+    try {
+        Start-Process "https://www.microsoft.com/edge"
+        Write-Host "[OK] Página aberta: Microsoft Edge (não encontrado instalado)." -ForegroundColor Green
+    } catch {
+        Write-Host "[ERRO] Não foi possível abrir a página do Microsoft Edge: $($_.Exception.Message)" -ForegroundColor Red
+    }
 }
 
 Write-Host "===== Configuração concluída =====" -ForegroundColor Cyan
