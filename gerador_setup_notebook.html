@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador · Setup de Notebooks</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Setup de notebooks</div>
+    <h1>Gerador de script de configuração</h1>
+    <p>Marque só as etapas que você vai executar nesta máquina, preencha os campos pedidos e o script <b>.ps1</b> é montado ao vivo ao lado — pronto para copiar ou baixar.</p>
+  </header>
+
+  <div class="grid">
+
+    <!-- LEFT: form -->
+    <div>
+      <div class="panel">
+        <p class="panel-title">Etapas</p>
+
+        <!-- STEP 1 -->
+        <div class="step" id="step1">
+          <div class="step-head" onclick="toggleStep(1)">
+            <span class="step-num">01</span>
+            <label class="switch"><input type="checkbox" id="chk1" onchange="onToggle(1)"><span class="slider"></span></label>
+            <div>
+              <div class="step-title">Usuário "indi"</div>
+              <div class="step-sub">Nova senha + adicionar ao grupo Administradores</div>
+            </div>
+          </div>
+          <div class="step-body">
+            <div class="step-body-inner">
+              <label class="field">
+                <span>Senha do usuário indi</span>
+                <div class="pw-row">
+                  <input type="password" id="pwIndi" placeholder="Ex: C0rp#2026!" oninput="render()">
+                  <button type="button" class="pw-toggle" onclick="togglePw('pwIndi', this)">mostrar</button>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step" id="step2">
+          <div class="step-head" onclick="toggleStep(2)">
+            <span class="step-num">02</span>
+            <label class="switch"><input type="checkbox" id="chk2" onchange="onToggle(2)"><span class="slider"></span></label>
+            <div>
+              <div class="step-title">Conta Administrador</div>
+              <div class="step-sub">Nova senha + nunca expira + habilitar conta</div>
+            </div>
+          </div>
+          <div class="step-body">
+            <div class="step-body-inner">
+              <label class="field">
+                <span>Senha do Administrador</span>
+                <div class="pw-row">
+                  <input type="password" id="pwAdmin" placeholder="Ex: Adm!nCorp#2026" oninput="render()">
+                  <button type="button" class="pw-toggle" onclick="togglePw('pwAdmin', this)">mostrar</button>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step" id="step3">
+          <div class="step-head" onclick="toggleStep(3)">
+            <span class="step-num">03</span>
+            <label class="switch"><input type="checkbox" id="chk3" onchange="onToggle(3)"><span class="slider"></span></label>
+            <div>
+              <div class="step-title">Nome do computador</div>
+              <div class="step-sub">Renomeia o host (aplica após reiniciar)</div>
+            </div>
+          </div>
+          <div class="step-body">
+            <div class="step-body-inner">
+              <label class="field">
+                <span>Hostname</span>
+                <input type="text" id="hostname" placeholder="NOTEBOOK0123" style="text-transform:uppercase" oninput="render()">
+              </label>
+              <div class="hint">Máx. 15 caracteres, sem espaços ou acentos.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="step" id="step4">
+          <div class="step-head" onclick="toggleStep(4)">
+            <span class="step-num">04</span>
+            <label class="switch"><input type="checkbox" id="chk4" onchange="onToggle(4)"><span class="slider"></span></label>
+            <div>
+              <div class="step-title">Páginas de instalação</div>
+              <div class="step-sub">Abre downloads: LibreOffice, Adobe Reader, 7-Zip, Teams, Chrome, Firefox, Edge*, AnyDesk, FortiClient</div>
+            </div>
+          </div>
+          <div class="step-body">
+            <div class="step-body-inner">
+              <div class="hint">*Edge só abre se ainda não estiver instalado na máquina.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <p class="panel-title">Comportamento final</p>
+        <label class="field" style="display:flex; align-items:center; gap:10px; margin-top:0;">
+          <input type="checkbox" id="chkRestart" checked onchange="render()" style="width:16px;height:16px;">
+          <span style="margin:0; font-family:'Inter'; font-size:13.5px; color:var(--text);">Reiniciar automaticamente ao final (necessário para o hostname valer)</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- RIGHT: code preview -->
+    <div class="code-panel">
+      <div class="code-head">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <div class="fname">setup_notebook.ps1</div>
+        <div style="width:40px;"></div>
+      </div>
+      <pre id="codeOut"></pre>
+      <div class="code-actions">
+        <button class="btn btn-primary" onclick="downloadCode()">Baixar .ps1</button>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    Rode o <b>.ps1</b> gerado sempre como Administrador. Nenhum dado deste formulário sai do navegador — o script é montado localmente e nada é enviado para servidor nenhum.
+  </footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>
